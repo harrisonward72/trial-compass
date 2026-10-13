@@ -26,7 +26,12 @@ public class User extends BaseEntity{
 
     protected User() {}
 
-
+    public User(String email, String hash, String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.passwordHash = hash;
+        this.email = email;
+    }
 
 
     public String getEmail() {
