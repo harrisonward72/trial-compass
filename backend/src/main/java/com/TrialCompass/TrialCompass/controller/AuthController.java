@@ -1,8 +1,11 @@
 package com.TrialCompass.TrialCompass.controller;
 
+import com.TrialCompass.TrialCompass.DTO.AuthResponse;
+import com.TrialCompass.TrialCompass.DTO.LoginRequest;
 import com.TrialCompass.TrialCompass.DTO.RegisterRequest;
 import com.TrialCompass.TrialCompass.DTO.UserResponse;
 import com.TrialCompass.TrialCompass.entity.User;
+import com.TrialCompass.TrialCompass.security.JwtService;
 import com.TrialCompass.TrialCompass.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     //post mapping for user registration
@@ -34,4 +39,16 @@ public class AuthController {
         //return response confirming registration
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
+
+    //validate body, check password, hand back a token
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        User user = userService.authenticate(request);
+        String token = jwtService.generateToken(user);
+
+        AuthResponse body = new AuthResponse(token, "Bearer", jwtService.getLifetimeSeconds(), new UserResponse(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName()));
+        return ResponseEntity.ok(body);
+    }
+
+
 }

@@ -38,4 +38,14 @@ public class GlobalExceptionHandler {
         //returns conflict - when theirs conflicting data
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
+
+    //runs when login fails
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleBadCredentials(InvalidCredentialsException ex) {
+        Map<String,Object> body = new LinkedHashMap<>();
+        body.put("message", ex.getMessage());
+
+        //401 unauthorized message
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
 }

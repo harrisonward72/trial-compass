@@ -1,8 +1,10 @@
 package com.TrialCompass.TrialCompass.service;
 
+import com.TrialCompass.TrialCompass.DTO.LoginRequest;
 import com.TrialCompass.TrialCompass.DTO.RegisterRequest;
 import com.TrialCompass.TrialCompass.entity.User;
 import com.TrialCompass.TrialCompass.exception.EmailAlreadyExistsException;
+import com.TrialCompass.TrialCompass.exception.InvalidCredentialsException;
 import com.TrialCompass.TrialCompass.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,4 +48,27 @@ public class UserService {
             throw new EmailAlreadyExistsException(email);
         }
     }
+
+    //checks email and password - returns the user if they match
+    //read only boolean will tell the database were only reading
+    @Transactional(readOnly = true)
+    public User authenticate(LoginRequest request) {
+        String email = request.email().trim().toLowerCase();
+        // throw an error if no one has this email
+        User user = userRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
+
+        //matches() hashes the typed password with the salt stored inside the saved hash and compares them
+        if(!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            throw new InvalidCredentialsException();
+        }
+        return user;
+    }
+
+    //finds user by email
+    @Transactional(readOnly = true)
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
+    }
+
+
 }
