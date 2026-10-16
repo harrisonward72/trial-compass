@@ -1,0 +1,65 @@
+body { 
+    font-family: system-ui, sans-serif; 
+    margin: 0; 
+    color: #1f2933; 
+    background: #f5f7fa; 
+}
+
+.topbar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 12px 24px; 
+    background: #12355b; 
+    color: #fff; 
+}
+
+.topbar a, .topbar span { 
+    color: #fff; 
+    margin-left: 16px; 
+    text-decoration: none; 
+}
+
+.topbar .brand {
+     font-weight: 700; 
+     font-size: 1.2rem; 
+     margin-left: 0; 
+    }
+
+main { 
+    max-width: 960px; 
+    margin: 24px auto; 
+    padding: 0 16px; 
+}
+
+.auth-card { 
+    max-width: 400px; 
+    margin: 40px auto; 
+    padding: 24px; 
+    background: #fff; 
+    border-radius: 8px; 
+    box-shadow: 0 1px 4px rgba(0,0,0,.15); 
+}
+
+.auth-card form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px; 
+}
+
+.auth-card input { 
+    padding: 8px; 
+    font-size: 1rem; 
+    border: 1px solid #9aa5b1; 
+    border-radius: 4px; 
+}
+
+.auth-card button { 
+    margin-top: 12px; 
+    padding: 10px; 
+    font-size: 1rem; 
+    cursor: pointer; 
+}
+
+.error { color: #b42318; }
+.hint { color: #616e7c; }

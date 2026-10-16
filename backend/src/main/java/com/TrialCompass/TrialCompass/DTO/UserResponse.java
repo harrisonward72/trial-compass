@@ -4,7 +4,7 @@ package com.TrialCompass.TrialCompass.DTO;
 public record UserResponse(
         Long id,
         String email,
-        String firstName,
-        String lastName
+        String firstName
+       // String lastName
 ) {
 }

@@ -1,13 +1,17 @@
-<main>
-  <h1>Trial Compass</h1>
+<header class="topbar">
+  <a routerLink="/" class="brand">Trial Compass</a>
 
-  @if (result(); as r) {
-    <p>API status: {{ r.status }}</p>
-    <p>{{ r.message }}</p>
-    <small>Server time: {{ r.timestamp }}</small>
-  } @else if (error()) {
-    <p>{{ error() }}</p>
-  } @else {
-    <p>Connecting...</p>
-  }
+  <nav>
+    @if (auth.user(); as user) {
+      <span>Hi, {{ user.firstName }}</span>
+      <button type="button" (click)="logout()">Logout</button>
+    } @else {
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Sign up</a>
+    }
+  </nav>
+</header>
+
+<main>
+  <router-outlet />
 </main>

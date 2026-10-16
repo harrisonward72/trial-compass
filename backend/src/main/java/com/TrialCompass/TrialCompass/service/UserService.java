@@ -30,7 +30,7 @@ public class UserService {
         //handle input
         String email = request.email().trim().toLowerCase();
         String firstName = request.firstName().trim().toLowerCase();
-        String lastName = request.lastName().trim().toLowerCase();
+        //String lastName = request.lastName().trim().toLowerCase();
 
         //check if email already exists
         if(userRepository.existsByEmail(email)) {
@@ -40,7 +40,7 @@ public class UserService {
         //hash password with Bcrypt - salted one way hash
         String hash = passwordEncoder.encode(request.password());
 
-        User user = new User(email, hash, firstName, lastName);
+        User user = new User(email, hash, firstName);
 
         try {
             return userRepository.save(user);

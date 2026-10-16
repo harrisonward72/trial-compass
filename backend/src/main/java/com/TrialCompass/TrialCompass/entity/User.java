@@ -19,16 +19,16 @@ public class User extends BaseEntity{
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+//    @Column(name = "last_name", nullable = false)
+//    private String lastName;
 
 
 
     protected User() {}
 
-    public User(String email, String hash, String firstName, String lastName) {
+    public User(String email, String hash, String firstName) {
         this.firstName = firstName;
-        this.lastName = lastName;
+        //this.lastName = lastName;
         this.passwordHash = hash;
         this.email = email;
     }
@@ -54,11 +54,11 @@ public class User extends BaseEntity{
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
+//    public String getLastName() {
+//        return lastName;
+//    }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+//    public void setLastName(String lastName) {
+//        this.lastName = lastName;
+//    }
 }

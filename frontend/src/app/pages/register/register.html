@@ -1,0 +1,34 @@
+<section class="auth-card">
+  <h1>Create Your Account</h1>
+
+  @if (errorMessage()) {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <!--[form group] connects the form to the form object in the ts class - no validate turns of browser validation to allow this validation-->
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <label for="firstName">First Name</label>
+    <input id="firstName" type="text" formControlName="firstName" autoComplete="given-name" />
+    @if (errorFor('firstName'); as msg) {
+      <small class="error">{{ msg }} </small>
+    }
+
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" autoComplete="email" />
+    @if (errorFor('email'); as msg) {
+      <small class="error"> {{ msg }} </small>
+    }
+
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" autoComplete="new-password" />
+    @if (errorFor('password'); as msg) {
+      <small class="error">{{ msg }}</small>
+    }
+
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Creating Account...' : 'Create Account' }}
+    </button>
+  </form>
+
+  <p>Already have an account? <a href="/login">Log in</a></p>
+</section>

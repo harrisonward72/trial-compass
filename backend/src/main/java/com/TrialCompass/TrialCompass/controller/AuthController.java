@@ -34,7 +34,7 @@ public class AuthController {
         User user = userService.register(request);
 
         //convert entity to a response DTO
-        UserResponse body = new UserResponse(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName());
+        UserResponse body = new UserResponse(user.getId(), user.getEmail(), user.getFirstName());
 
         //return response confirming registration
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
@@ -46,7 +46,7 @@ public class AuthController {
         User user = userService.authenticate(request);
         String token = jwtService.generateToken(user);
 
-        AuthResponse body = new AuthResponse(token, "Bearer", jwtService.getLifetimeSeconds(), new UserResponse(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName()));
+        AuthResponse body = new AuthResponse(token, "Bearer", jwtService.getLifetimeSeconds(), new UserResponse(user.getId(), user.getEmail(), user.getFirstName()));
         return ResponseEntity.ok(body);
     }
 

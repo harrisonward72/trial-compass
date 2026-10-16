@@ -1,21 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
-import { ApiService, PingResponse } from './api.service';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  private api = inject(ApiService);
+  protected auth = inject(AuthService);
 
-  result = signal<PingResponse | null>(null);
-  error = signal<string | null>(null);
-
-  constructor() {
-    this.api.ping().subscribe({
-      next: (res) => this.result.set(res),
-      error: () => this.error.set('Could not reach the Trial Compass API.'),
-    });
+  logout():void {
+    this.auth.logout();
   }
+
 }
