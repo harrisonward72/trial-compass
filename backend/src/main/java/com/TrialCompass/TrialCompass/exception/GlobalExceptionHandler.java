@@ -48,4 +48,20 @@ public class GlobalExceptionHandler {
         //401 unauthorized message
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
     }
+
+    //unusable search resulting in a 400 bad request code
+    @ExceptionHandler(InvalidSearchException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidSearch(InvalidSearchException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    //outside service is down display a 502 bad gateway
+    @ExceptionHandler(ExternalServiceException.class)
+    public ResponseEntity<Map<String, Object>> handleExternalFailure(ExternalServiceException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(body);
+    }
 }

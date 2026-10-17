@@ -4,6 +4,7 @@ import com.TrialCompass.TrialCompass.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +38,8 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/ping", "/api/auth/**").permitAll()
+                        //public feature - user does not have to be logged in to search -- read only
+                        .requestMatchers(HttpMethod.GET, "/api/studies/search", "/api/studies/statuses").permitAll()
                         .anyRequest().authenticated()
                 )
                 //this makes so bad login returns 401
