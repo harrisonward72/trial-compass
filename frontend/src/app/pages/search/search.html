@@ -1,0 +1,192 @@
+<section class="page">
+  <h1>Find clinical trials</h1>
+
+  <!-- this form is linked to the form in search.ts-->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="filters">
+    <div class="row">
+      <div class="field">
+        <label for="condition">Condition or disease</label>
+        <input id="condition" type="text" formControlName="condition" placeholder="e.g. diabetes" />
+        @if (fieldError('condition'); as msg) {
+          <small class="error">{{ msg }}</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="keyword">Other keywords</label>
+        <input
+          id="keyword"
+          type="text"
+          formControlName="keyword"
+          placeholder="e.g. immunotherapy"
+        />
+        @if (fieldError('keyword'); as msg) {
+          <small class="error">{{ msg }}</small>
+        }
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="zip">ZIP code</label>
+        <input
+          id="zip"
+          inputmode="number"
+          formControlName="zip"
+          maxLength="5"
+          placeholder="12121"
+        />
+        @if (fieldError('zip'); as msg) {
+          <small class="error">{{ msg }}</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="radiusMiles">Search radius (miles)</label>
+        <input id="radiusMiles" type="number" formControlName="radiusMiles" />
+        @if (fieldError('radiusMiles'); as msg) {
+          <small class="error">{{ msg }}</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="age">Enter your age</label>
+        <input id="age" type="number" formControlName="age" placeholder="optional" />
+        @if (fieldError('age'); as msg) {
+          <small class="error">{{ msg }}</small>
+        }
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>Gender</legend>
+      <label><input type="radio" formControlName="sex" value="ANY" />Any</label>
+      <label><input type="radio" formControlName="sex" value="FEMALE" />Female</label>
+      <label><input type="radio" formControlName="sex" value="MALE" />Male</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Trial Status</legend>
+      <!--this will come from the recruitment statuses table in SQL-->
+      @for (s of statuses(); track s.code) {
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isSelected(s.code)"
+            (change)="onStatusChange(s.code, $event)"
+          />{{ s.label }}
+        </label>
+      }
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Searching...' : 'Search' }}
+      </button>
+      <button type="button" class="secondary" (click)="clearFilters()">Clear filters</button>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error" role="alert">{{ errorMessage() }}</p>
+    }
+
+    @if (notice()) {
+      <p class="notice">{{ notice() }}</p>
+    }
+
+    @if (loading()) {
+      <p>Searching....</p>
+    } @else if (results(); as list) {
+      @if (list.length === 0) {
+        <p>No trials found. Try removing a filter or using a different name/keyword</p>
+      } @else {
+        <p class="count">
+          {{ totalCount() | number }} trials found. Showing page {{ pageIndex() + 1 }}.
+        </p>
+
+        <ul class="results">
+          @for (s of list; track s.nctId) {
+            <li class="card">
+              <div class="card-top">
+                <span class="badge">{{ s.statusLabel }}</span>
+                <span class="nct">{{ s.nctId }}</span>
+              </div>
+
+              <!--link to the gov website study, trial compass detail page to be built out later-->
+              <h2>
+                <a
+                  [href]="'https://cliniclatrials.gov/study/' + s.nctId"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ s.title }}</a
+                >
+              </h2>
+
+              @if (s.organization) {
+                <p class="meta">{{ s.organization }}</p>
+              }
+              @if (s.conditions.length) {
+                <p class="meta"><strong>Conditions:</strong>{{ s.conditions.join(', ') }}</p>
+              }
+              @if (s.summary) {
+                <p>{{ s.summary }}</p>
+              }
+
+              <p class="meta">
+                @if (s.ageRange) {
+                  <span>Ages: {{ s.ageRange }}</span>
+                }
+                @if (sexLabel(s.sex); as sx) {
+                  <span>{{ sx }}</span>
+                }
+                @if (s.lastUpdated) {
+                  <span>Updated {{ s.lastUpdated }}</span>
+                }
+              </p>
+
+              @if (s.locations.length) {
+                <p class="meta">
+                  <strong>Locations:</strong>{{ s.locations.join(' | ') }}
+                  @if (s.totalLocations > s.locations.length) {
+                    (+{{ s.totalLocations - s.locations.length }} more)
+                  }
+                </p>
+              }
+
+              <button type="button" (click)="saveTrial(s)">Save Trial</button>
+
+              <!--prompts user to login if they want to save something-->
+              @if (loginPromptFor() === s.nctId) {
+                <p class="prompt" role="status">
+                  Login or create a free account to save this trial.
+                  <a routerLink="/login" [queryParams]="{ returnUrl: '/search' }">Login</a>
+                  or
+                  <a routerLink="/register">Sign up</a>
+                </p>
+              }
+            </li>
+          }
+        </ul>
+
+        <div class="pager">
+          <button
+            type="button"
+            class="secondary"
+            (click)="previous()"
+            [disabled]="!hasPrevious() || loading()"
+          >
+            Previous
+          </button>
+          <span>Page {{ pageIndex() + 1 }}</span>
+          <button
+            type="button"
+            class="secondary"
+            (click)="next()"
+            [disabled]="!nextToken() || loading()"
+          >
+            Next
+          </button>
+        </div>
+      }
+    }
+  </form>
+</section>

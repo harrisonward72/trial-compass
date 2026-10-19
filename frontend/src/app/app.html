@@ -2,7 +2,9 @@
   <a routerLink="/" class="brand">Trial Compass</a>
 
   <nav>
+    <a routerLink="/search">Search</a>
     @if (auth.user(); as user) {
+      <a routerLink="/dashboard">My trials</a>
       <span>Hi, {{ user.firstName }}</span>
       <button type="button" (click)="logout()">Logout</button>
     } @else {
