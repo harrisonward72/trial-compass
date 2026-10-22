@@ -4,7 +4,7 @@ import java.util.List;
 
 //one search result row, keep only the results that match the filters
 public record StudySummary(
-        String notId,
+        String nctId,
         String title,
         String status,
         String statusLabel,

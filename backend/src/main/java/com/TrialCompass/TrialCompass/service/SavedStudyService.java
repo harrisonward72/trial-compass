@@ -12,6 +12,8 @@ import com.TrialCompass.TrialCompass.exception.InvalidRequestException;
 import com.TrialCompass.TrialCompass.exception.ResourceNotFoundException;
 import com.TrialCompass.TrialCompass.repository.SavedStudyRepository;
 import com.TrialCompass.TrialCompass.repository.TrackingStatusRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,8 @@ import java.util.List;
 
 @Service
 public class SavedStudyService {
+
+    private static final Logger log = LoggerFactory.getLogger(SavedStudyService.class);
 
     private static final String DEFAULT_TRACKING_STATUS = "INTERESTED";
     private final SavedStudyRepository savedStudyRepository;
@@ -52,7 +56,7 @@ public class SavedStudyService {
 
     //SAVE a trial for the user
     //checks to see if the user is trying to save a duplicate trial - sql will not allow duplicate copies -- spring will throw an error
-    @Transactional(readOnly = true)
+    @Transactional
     public SavedStudyResponse save(String email, SaveStudyRequest request) {
         User user = userService.getByEmail(email);
 
@@ -99,7 +103,8 @@ public class SavedStudyService {
     //finds a saved trial if it belongs to the user whos requesting it
     private SavedStudies findOwned(String email, Long id) {
         User user = userService.getByEmail(email);
-        return savedStudyRepository.findByUserId(id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Trial does not appear to be saved"));
+        log.info("findOwned: email={} userId={} requestedId={}", email, user.getId(), id);
+        return savedStudyRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Trial does not appear to be saved"));
     }
 
     private TrackingStatus findTrackingStatus(String code) {

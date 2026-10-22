@@ -13,4 +13,6 @@ public interface SavedStudyRepository extends JpaRepository<SavedStudies, Long> 
     Optional<SavedStudies> findByUserId(Long id, Long userId);
 
     boolean existsByUserIdAndNctId(Long userId, String nctId);
+
+    Optional<SavedStudies> findByIdAndUserId(Long id, Long userId);
 }
