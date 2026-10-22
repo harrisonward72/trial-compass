@@ -1,0 +1,93 @@
+.list { 
+    list-style: none; 
+    padding: 0; 
+}
+
+.card { 
+    background: #fff; 
+    padding: 16px; 
+    margin: 12px 0; 
+    border-radius: 8px; 
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+.card h2 { 
+    font-size: 1.1rem; 
+    margin: 8px 0; 
+}
+
+.card-top { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+.badge { 
+    background: #e1effe; 
+    color: #12355b; 
+    padding: 2px 10px; 
+    border-radius: 12px; 
+    font-size: .85rem; 
+}
+
+.nct { 
+    color: #616e7c; 
+    font-size: .85rem; 
+}
+
+.controls { 
+    display: flex; 
+    gap: 16px; 
+    flex-wrap: wrap; 
+    align-items: flex-end; 
+    margin: 12px 0; 
+}
+
+.control { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 4px; 
+}
+
+.control select, .control input { 
+    padding: 8px; 
+    font-size: 1rem; 
+    border: 1px solid #9aa5b1; 
+    border-radius: 4px; 
+}
+
+.meta { 
+    color: #616e7c; 
+    font-size: .85rem; 
+    margin: 4px 0; 
+}
+
+.count { 
+    font-weight: 600; 
+}
+
+.overdue { 
+    color: #b42318; 
+    font-weight: 600; 
+}
+
+.danger { 
+    color: #b42318; 
+    background: #fff; 
+    border: 1px solid #b42318; 
+    padding: 8px 16px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+
+.notice { 
+    background: #e8f5e9; 
+    padding: 8px 12px; 
+    border-radius: 6px; 
+}
+
+.empty { 
+    background: #fff; 
+    padding: 24px; 
+    border-radius: 8px; 
+    text-align: center; 
+}

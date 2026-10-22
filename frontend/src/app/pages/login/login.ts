@@ -53,7 +53,7 @@ export class Login {
   //only take paths with single '/' otherwise hackers could develope a malicious redirect link
   private safeReturnUrl(): string {
     const url = this.route.snapshot.queryParamMap.get('returnUrl');
-    return url && url.startsWith('/') && !url.startsWith('//') ? url : '/dashboard';
+    return url && url.startsWith('/') && !url.startsWith('//') ? url : '/';
   }
 
 }

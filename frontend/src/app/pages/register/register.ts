@@ -66,7 +66,7 @@ export class Register {
     const value = this.form.getRawValue();
     this.auth.register({firstName: value.firstName.trim(), email: value.email.trim(), password: value.password})
     .subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/search']),
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);
         if(err.status === 400 && err.error?.errors) {

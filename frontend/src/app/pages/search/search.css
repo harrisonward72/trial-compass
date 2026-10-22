@@ -130,3 +130,9 @@ button.secondary {
     border-radius: 6px; 
     margin-top: 8px; 
 }
+
+.saved {
+    color: #1b5e20;
+    font-weight: 600; 
+    margin-right: 12px;
+}

@@ -6,6 +6,7 @@ import { StudyService } from '../../study.service';
 import { AuthService } from '../../core/auth.service';
 import { RecruitmentStatus, SearchFilters, SexChoice, StudySummary } from '../../study.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SavedStudyService } from '../../saved-study.service';
 
 
 type FieldName = 'condition' | 'keyword' | 'zip' | 'radiusMiles' | 'age';
@@ -21,6 +22,7 @@ export class Search {
   private fb = inject(NonNullableFormBuilder);
   private studyService = inject(StudyService);
   private auth = inject(AuthService);
+  private savedService = inject(SavedStudyService);
 
 
   //the form itself
@@ -43,6 +45,8 @@ export class Search {
   errorMessage = signal<string | null>(null);
   results = signal<StudySummary [] | null>(null); //if null = no search has been run
   totalCount = signal(0);
+  savedIds =signal<Set<string>>(new Set()); //shows saved once trial is saved
+  savingId = signal<string | null>(null); //allows saved button to be disabled when saved 
 
   //gov api gives a token for the next page - need to remember each page's token to support previous page
   //pagination features
@@ -62,6 +66,15 @@ export class Search {
       next: (list) => this.statuses.set(list),
       error: () => this.errorMessage.set('Could not load the status options')
     });
+
+    //if logged in find out which trials are already saved
+    if(this.auth.isAuthenticated()) {
+      this.savedService.list().subscribe({
+        next: (list) => this.savedIds.set(new Set(list.map((s) => s.nctId))),
+        error: () => {
+        }
+      })
+    }
   }
 
   //status checkboxes ======================================================
@@ -189,6 +202,10 @@ export class Search {
     }
   }
 
+  isSaved(nctId: string): boolean {
+    return this.savedIds().has(nctId);
+  }
+
   //option to save trial to dashboard
   saveTrial(study: StudySummary): void {
     if(!this.auth.isAuthenticated()) {
@@ -196,7 +213,33 @@ export class Search {
       this.loginPromptFor.set(study.nctId);
       return;
     }
-    //to be built later
-    this.notice.set('Saving trials feature coming soon');
+    
+    this.savingId.set(study.nctId);
+    this.errorMessage.set(null);
+    this.notice.set(null);
+
+    this.savedService
+      .save({nctId: study.nctId, title: study.title, lastKnownStatus:study.status})
+      .subscribe({
+        next:() => {
+          this.markSaved(study.nctId);
+          this.savingId.set(null);
+          this.notice.set('Saved to your dashboard');
+        },
+        error: (err: HttpErrorResponse) => {
+          this.savingId.set(null);
+          if(err.status === 409) { //already saved mark it saved
+            this.markSaved(study.nctId);
+            return;
+          }
+          this.errorMessage.set(this.messageFrom(err))
+        }
+      });
+  }
+
+  private markSaved(nctId: string): void {
+    const next = new Set(this.savedIds());
+    next.add(nctId);
+    this.savedIds.set(next);
   }
 }

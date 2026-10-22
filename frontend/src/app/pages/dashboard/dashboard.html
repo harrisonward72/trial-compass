@@ -1,4 +1,88 @@
 <section class="page">
   <h1>Welcome, {{ auth.user()?.firstName }}</h1>
-  <p>Your saved trials will appear here</p>
+
+  @if (errorMessage()) {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice" role="status">{{ notice() }}</p>
+  }
+  @if (loading()) {
+    <p>Loading your saved trials...</p>
+  } @else if (items().length === 0) {
+    <div class="empty">
+      <p>
+        You don't have any saved trials yet. You can visit our search page to search for a
+        trial/study that might suit you.
+      </p>
+      <a routerLink="/search">Search for trials here</a>
+    </div>
+  } @else {
+    <p class="count">{{ items().length }} saved {{ items().length === 1 ? 'trial' : 'trials' }}</p>
+
+    <ul class="list">
+      @for (item of items(); track item.id) {
+        <li class="card">
+          <div class="card-top">
+            <span class="badge">{{ prettyStatus(item.lastKnownStatus) }}</span>
+            <span class="nct">{{ item.nctId }}</span>
+          </div>
+          <h2>
+            <a
+              [href]="'https://clinicaltrials.gov/study/' + item.nctId"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ item.title }}</a
+            >
+          </h2>
+
+          <div class="controls">
+            <div class="control">
+              <label [for]="'status-' + item.id">My progress</label>
+              <!--statuses come from the database table change() executes when the user picks an option-->
+              <select
+                [id]="'status-' + item.id"
+                (change)="onStatusChange(item, $event)"
+                [disabled]="busyId() === item.id"
+              >
+                @for (s of trackingStatuses(); track s.code) {
+                  <option [value]="s.code" [selected]="s.code === item.trackingStatusCode">
+                    {{ s.label }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="control">
+              <label [for]="'date-' + item.id">Follow up date</label>
+              <input
+                type="date"
+                [id]="'date-' + item.id"
+                [value]="item.followUpDate ?? ''"
+                (change)="onDateChange(item, $event)"
+                [disabled]="busyId() === item.id"
+              />
+              @if (isOverdue(item)) {
+                <small class="overdue">Overdue</small>
+              }
+            </div>
+
+            <button
+              type="button"
+              class="dange"
+              (click)="remove(item)"
+              [disabled]="busyId() === item.id"
+            >
+              Remove
+            </button>
+          </div>
+
+          <p class="meta">Saved {{ item.savedAt | date: 'MMM d, y' }}</p>
+        </li>
+      }
+    </ul>
+
+    <p><a routerLink="/search">Search for more trials</a></p>
+  }
 </section>

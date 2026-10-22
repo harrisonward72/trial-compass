@@ -151,8 +151,14 @@
                   }
                 </p>
               }
-
-              <button type="button" (click)="saveTrial(s)">Save Trial</button>
+              @if (isSaved(s.nctId)) {
+                <span class="saved">Saved</span>
+                <a routerLink="/dashboard">View my trials</a>
+              } @else {
+                <button type="button" (click)="saveTrial(s)" [disabled]="savingId() === s.nctId">
+                  {{ savingId() === s.nctId ? 'Saving...' : 'Save trial' }}
+                </button>
+              }
 
               <!--prompts user to login if they want to save something-->
               @if (loginPromptFor() === s.nctId) {
