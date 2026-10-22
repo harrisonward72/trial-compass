@@ -1,4 +1,8 @@
 package com.TrialCompass.TrialCompass.DTO;
 
-public record TrackingStatusResponse() {
+//tracking status dropdown
+public record TrackingStatusResponse(
+        String code,
+        String label
+) {
 }

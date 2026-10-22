@@ -8,7 +8,7 @@ Route protection -           done             done
 
 Dashboard -                     
 
-Search w/filters
+Search w/filters            seems done      done
 
 status checkboxes
 
@@ -68,7 +68,7 @@ RecruitmentStatusRepository - adds two additional methods as well
 
 * Entity - Base entity for encapsulation and inheritance as required for this project, allows other entities to inherit
 common attributes and methods. User entity is included to house the user object. RecruitmentStatus to track the recruitment
-status of trials.
+status of trials. Tracking status and saved study entities serve as objects to track statuses and to house saved trial entities.
 
 * DTO - includes records for multiple data types
 
@@ -99,6 +99,7 @@ Search
 Database
 * Users table - houses user information created by the V1 file in db.migration. recruitment_statuses table - created
 by V2 file in db.migration, contains information reguarding the recruitment status of the trial. 
+* DONOT CHANGE the db.migration files it will mess things up
 
 
 
@@ -117,14 +118,14 @@ by V2 file in db.migration, contains information reguarding the recruitment stat
 
 
 ### NEED TO BUILD
-* search page
+* search page ---- done
 * trial detail page
 * saved trials
 * notes
 * reports
 * tests
-* login to save trials
-* login redirect
+* login to save trials -- done
+* login redirect ----- done
 * plain language summaries - trial summary w/word lookup??
 
 
@@ -133,3 +134,9 @@ by V2 file in db.migration, contains information reguarding the recruitment stat
 * email sms notifications on change
 * trial comparisons
 * alerts for new posted trials/studies that match a users condition/saved demographics
+
+
+
+# Security note for saved trials
+The server needs to verify the user from their token, not the users ID sent by the browser. 
+This way someone cannot change the URL to get another persons data.

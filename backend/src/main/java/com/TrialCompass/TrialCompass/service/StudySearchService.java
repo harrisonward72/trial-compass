@@ -73,7 +73,8 @@ public class StudySearchService {
         //maps each gov study to smaller dto objects.
         Map<String, String>labels = statusRepository.findAllByOrderBySortOrderAsc().stream().collect(Collectors.toMap(RecruitmentStatus::getCode, RecruitmentStatus::getLabel));
 
-        List<StudySummary> studies = response.studies() == null ? List.of() : response.studies().stream().map(s -> toSummary(s, labels)).toList();
+        List<StudySummary> studies = response.studies() == null ? List.of() : response.studies()
+                .stream().map(s -> toSummary(s, labels)).filter(java.util.Objects::nonNull).toList();
 
         long total = response.totalCount() != null ? response.totalCount() : studies.size();
         return new StudySearchResponse(studies, total, response.nextPageToken());
