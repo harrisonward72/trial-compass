@@ -1,4 +1,11 @@
 package com.TrialCompass.TrialCompass.DTO;
 
-public record NoteResponse() {
+import java.time.LocalDateTime;
+
+public record NoteResponse(
+        Long id,
+        String body,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+) {
 }

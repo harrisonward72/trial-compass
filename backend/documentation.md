@@ -6,17 +6,17 @@ Login -                      done            done
 
 Route protection -           done             done
 
-Dashboard -                     
+Dashboard -                   done          done  
 
-Search w/filters            seems done      done
+Search w/filters             done      done
 
-status checkboxes
+status checkboxes             done      done
 
-trial detail page
+trial detail page           
 
-save, status, follow up feature
+save, status, follow up feature     
 
-notes (CRUD)
+notes (CRUD)                   done         done
 
 reports
 
@@ -120,8 +120,8 @@ by V2 file in db.migration, contains information reguarding the recruitment stat
 ### NEED TO BUILD
 * search page ---- done
 * trial detail page
-* saved trials
-* notes
+* saved trials -- done
+* notes -- done 
 * reports
 * tests
 * login to save trials -- done
@@ -140,3 +140,13 @@ by V2 file in db.migration, contains information reguarding the recruitment stat
 # Security note for saved trials
 The server needs to verify the user from their token, not the users ID sent by the browser. 
 This way someone cannot change the URL to get another persons data.
+
+
+
+# Areas of improvement for currently built items
+
+* buttons can look more appealing
+* user account page linked to the 'Hi, "user"' in the navbar
+* better way to organize saved trials
+* way to see if you have notes for a trial without having to click notes button
+* better summaries on saved trials page - like listing locations and dates for the user to see

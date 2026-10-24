@@ -26,8 +26,6 @@ import java.util.List;
 @Service
 public class SavedStudyService {
 
-    private static final Logger log = LoggerFactory.getLogger(SavedStudyService.class);
-
     private static final String DEFAULT_TRACKING_STATUS = "INTERESTED";
     private final SavedStudyRepository savedStudyRepository;
     private final TrackingStatusRepository trackingStatusRepository;
@@ -101,9 +99,8 @@ public class SavedStudyService {
     //helper methods===========================================================================
 
     //finds a saved trial if it belongs to the user whos requesting it
-    private SavedStudies findOwned(String email, Long id) {
+    public SavedStudies findOwned(String email, Long id) {
         User user = userService.getByEmail(email);
-        log.info("findOwned: email={} userId={} requestedId={}", email, user.getId(), id);
         return savedStudyRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Trial does not appear to be saved"));
     }
 
