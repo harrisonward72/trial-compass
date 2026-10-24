@@ -8,10 +8,11 @@ import { SavedStudy } from '../../saved-study.model';
 import { TrackingStatus } from '../../saved-study.model';
 import { forkJoin } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NotesPanel } from '../../components/notes-panel/notes-panel';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, NotesPanel],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -28,6 +29,7 @@ export class Dashboard {
   errorMessage = signal<string | null>(null);
   notice = signal<string | null>(null);
   busyId = signal<number | null>(null);
+  openNotes = signal<Set<number>>(new Set); //which trials have notes open - set holds the saved trials ids
 
 
   constructor() {
@@ -136,5 +138,19 @@ export class Dashboard {
     }
     const text = code.toLowerCase().replace(/_/g, ' '); //replace the underscores with spaces
     return text.charAt(0).toUpperCase() + text.slice(1); 
+  }
+
+  isNotesOpen(id: number): boolean {
+    return this.openNotes().has(id);
+  }
+
+  toggleNotes(id: number): void {
+    const next = new Set(this.openNotes());
+    if(next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    this.openNotes.set(next);
   }
 }

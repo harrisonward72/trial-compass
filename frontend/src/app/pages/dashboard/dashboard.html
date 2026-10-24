@@ -78,6 +78,19 @@
             </button>
           </div>
 
+          <button
+            type="button"
+            class="notes-toggle"
+            (click)="toggleNotes(item.id)"
+            [attr.aria-expanded]="isNotesOpen(item.id)"
+          >
+            {{ isNotesOpen(item.id) ? 'Hide notes' : 'Notes' }}
+          </button>
+
+          @if (isNotesOpen(item.id)) {
+            <app-notes-panel [studyId]="item.id"></app-notes-panel>
+          }
+
           <p class="meta">Saved {{ item.savedAt | date: 'MMM d, y' }}</p>
         </li>
       }

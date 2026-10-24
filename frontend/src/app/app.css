@@ -61,5 +61,10 @@ main {
     cursor: pointer; 
 }
 
+button {
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
 .error { color: #b42318; }
 .hint { color: #616e7c; }

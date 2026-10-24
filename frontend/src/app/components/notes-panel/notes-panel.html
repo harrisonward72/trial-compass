@@ -1,0 +1,72 @@
+<section class="notes" aria-label="Notes for saved trials">
+  @if (errorMessage()) {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <!--add a new form, [formcontrol] links the text to newNote in .ts-->
+  <div class="add">
+    <label [for]="'new-note-' + studyId()">Add a note</label>
+    <textarea
+      [id]="'new-note-' + studyId()"
+      rows="3"
+      [maxLength]="maxLength"
+      [formControl]="newNote"
+      placeholder="Thoughts, questions, next steps"
+    ></textarea>
+    <div class="add-footer">
+      <small class="hint">{{ newNote.value.length }} / {{ maxLength }}</small>
+      <button type="button" (click)="add()" [disabled]="busy()">Add note</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p>loading notes...</p>
+  } @else if (notes().length === 0) {
+    <p class="hint">You don't have any saved notes yet</p>
+  } @else {
+    <ul class="note-list">
+      @for (n of notes(); track n.id) {
+        <li class="note">
+          @if (edittingId() === n.id) {
+            <!--if the note is being editted-->
+            <label class="sr-only" [for]="'edit note-' + n.id">Edit note</label>
+            <textarea
+              [id]="'edit-note-' + n.id"
+              rows="3"
+              [maxLength]="maxLength"
+              [formControl]="editNote"
+            ></textarea>
+            <div class="row">
+              <small class="hint">{{ editNote.value.length }} / {{ maxLength }}</small>
+              <span class="buttons">
+                <button type="button" (click)="saveEdit(n)" [disabled]="busy()">Save</button>
+                <button type="button" class="secondary" (click)="cancelEdit()" [disabled]="busy()">
+                  Cancel
+                </button>
+              </span>
+            </div>
+          } @else {
+            <!--read only mode-->
+            <p class="body">{{ n.body }}</p>
+            <div class="row">
+              <small class="hint">
+                {{ n.createdAt | date: 'MMM d, y, h:mm a' }}
+                @if (wasEdited(n)) {
+                  (editted)
+                }
+              </small>
+              <span class="buttons">
+                <button type="button" class="secondary" (click)="startEdit(n)" [disabled]="busy()">
+                  Edit
+                </button>
+                <button type="button" class="danger" (click)="remove(n)" [disabled]="busy()">
+                  Delete
+                </button>
+              </span>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>
