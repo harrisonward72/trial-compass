@@ -19,8 +19,9 @@ public class FollowUpReport extends Report{
     private final SavedStudyRepository savedStudyRepository;
 
     public FollowUpReport(SavedStudyRepository savedStudyRepository) {
-        this.savedStudyRepository = savedStudyRepository;
         super("follow-up trials", "Upcoming follow ups", "Trials with a follow up date, ordered by soonest first");
+        this.savedStudyRepository = savedStudyRepository;
+
     }
 
     @Override
