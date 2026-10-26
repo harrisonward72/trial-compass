@@ -1,0 +1,105 @@
+<section class="page">
+  <h1 class="no-print">Reports</h1>
+
+  <!--no print hides this code block when the user prints-->
+  <form [formGroup]="form" (ngSubmit)="run()" class="filters no-print" novalidate>
+    <div class="row">
+      <div class="field">
+        <label for="type">Report</label>
+        <select id="type" formControlName="type" (change)="run()">
+          @for (r of reports(); track r.type) {
+            <option [value]="r.type">{{ r.title }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="keyword">Keyword</label>
+        <input id="keyword" type="text" formControlName="keyword" placeholder="title or NCT Id" />
+      </div>
+
+      <div class="field">
+        <label for="trackingStatuses">My Interest</label>
+        <select id="trackingStatuses" formControlName="trackingStatuses">
+          <option value="">All</option>
+          @for (s of trackingStatuses(); track s.code) {
+            <option [value]="s.code">{{ s.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="from">From Date</label>
+        <input id="from" type="date" formControlName="from" />
+      </div>
+
+      <div class="field">
+        <label for="to">To Date</label>
+        <input id="to" type="date" formControlName="to" />
+      </div>
+    </div>
+
+    @if (description()) {
+      <p class="hint">{{ description() }}</p>
+    }
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Running...' : 'Report' }}
+      </button>
+      <button type="button" class="secondary" (click)="clearFilters()" [disabled]="loading()">
+        Clear Filters
+      </button>
+    </div>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <div aria-live="polite">
+    @if (result(); as r) {
+      <div class="report">
+        <div class="report-header">
+          <h2>{{ r.title }}</h2>
+          <p class="meta">
+            Generated {{ r.generatedAt | date: 'MMM d, y, h:mm a' }} &middot; {{ r.rowCount }}
+            {{ r.rowCount === 1 ? 'row' : 'rows' }}
+          </p>
+        </div>
+
+        @if (r.rows.length === 0) {
+          <p>No rows matched, either save some trials or remove some filters</p>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  @for (c of r.columns; track $index) {
+                    <th scope="col">{{ c }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of r.rows; track $index) {
+                  <tr>
+                    @for (cell of row; track $index) {
+                      <td>{{ cell }}</td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        <div class="actions no-print">
+          <button type="button" (click)="downloadCsv()" [disabled]="r.rows.length === 0">
+            Download CSV
+          </button>
+          <button type="button" class="secondary" (click)="print()">Print</button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

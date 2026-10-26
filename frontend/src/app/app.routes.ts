@@ -7,6 +7,7 @@ import { inject } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { Search } from './pages/search/search';
 import { homeRedirectGuard } from './core/home.guard';
+import { Reports } from './pages/reports/reports';
 
 export const routes: Routes = [
     //auth service evaluates if logged in or not, if not goes to search page, if they are they go to their dashboard
@@ -14,6 +15,8 @@ export const routes: Routes = [
     {path: 'search', component: Search},
     {path: 'login', component: Login},
     {path: 'register', component: Register},
+    //runs the authgaurd before activating this page to check if a user is logged in
+    {path: 'reports', component: Reports, canActivate: [authGuard]},
     //runs the authgaurd before activating this page to check if a user is logged in
     {path: 'dashboard', component: Dashboard, canActivate: [authGuard]},
     //unrecognized url sends people to the first path evaluation at the top

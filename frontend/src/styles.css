@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+/* This hides the menu bar and anything with the class no-print when printing a report */
+@media print {
+    .topbar, .no-print {
+        display : none !important;
+    }
+    body {
+        background: #fff;
+    }
+    main {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+}
