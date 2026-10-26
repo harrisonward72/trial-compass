@@ -29,7 +29,7 @@ public class UserService {
     public User register(RegisterRequest request) {
         //handle input
         String email = request.email().trim().toLowerCase();
-        String firstName = request.firstName().trim().toLowerCase();
+        String firstName = request.firstName().trim();
         //String lastName = request.lastName().trim().toLowerCase();
 
         //check if email already exists
