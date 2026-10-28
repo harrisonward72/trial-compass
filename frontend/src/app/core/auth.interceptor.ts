@@ -6,7 +6,7 @@ import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { AuthService } from "./auth.service";
 import { catchError, throwError } from "rxjs";
-import { environment } from "../../environments/environment.development";
+import { environment } from "../../environments/environment";
 
 //write attach token logic once instead of every service call
 export const authInterceptor: HttpInterceptorFn = (req, next) =>{
