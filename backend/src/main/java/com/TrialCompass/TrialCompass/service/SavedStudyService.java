@@ -58,6 +58,7 @@ public class SavedStudyService {
     public SavedStudyResponse save(String email, SaveStudyRequest request) {
         User user = userService.getByEmail(email);
 
+        //if a duplicate exists
         if(savedStudyRepository.existsByUserIdAndNctId(user.getId(), request.nctId())) {
             throw new DuplicateSavedStudyException(request.nctId());
         }

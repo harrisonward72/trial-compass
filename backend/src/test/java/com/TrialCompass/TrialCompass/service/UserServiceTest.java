@@ -47,10 +47,10 @@ public class UserServiceTest {
         //email and name trimmed, email to lowercase, password hashed
         RegisterRequest request = new RegisterRequest("    fake@email.COM  ", "samplePassword", "   Harry   ");
 
-        //programs the fake database with the sample input
+
         when(userRepository.existsByEmail("fake@email.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
+        //programs the fake database with the sample input
         User saved = userService.register(request);
 
         assertThat(saved.getEmail()).isEqualTo("fake@email.com"); //trimmed and lower case
@@ -74,7 +74,8 @@ public class UserServiceTest {
         when(userRepository.existsByEmail("harry@fakeemail.com")).thenReturn(true);
 
         //if an existing email exists looking for the custom exception to be thrown when the user tries to create account with the same email
-        assertThatThrownBy(() -> userService.register(request)).isInstanceOf(EmailAlreadyExistsException.class).hasMessageContaining("harry@fakeemail.com");
+        assertThatThrownBy(() -> userService.register(request)).isInstanceOf(EmailAlreadyExistsException.class)
+                .hasMessageContaining("harry@fakeemail.com");
 
         //checking the fake database to ensure duplicate emails do not exist
         verify(userRepository, never()).save(any(User.class));
